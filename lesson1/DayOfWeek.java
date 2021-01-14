@@ -9,10 +9,10 @@ public enum DayOfWeek {
     Saturday,
     Sunday;
 
-    static void allDays(){
+    static void allDays() {
         System.out.println("Various: ");
-        for (DayOfWeek d:DayOfWeek.values()) {
-            System.out.print(d+", ");
+        for (DayOfWeek d : DayOfWeek.values()) {
+            System.out.print(d + ", ");
         }
     }
 

@@ -39,7 +39,7 @@ public class Human implements Runnable,Jumpable{
     @Override
     public void jump(int max,int dis) {
         if ((max-dis)>=0) {
-            System.out.println("Human jump of the wall. H.: "+dis);
+            System.out.println("Human jump of the wall. H.: " + dis);
         }else{
             System.out.println("Human can't jump of the wall. H.: "+dis);
         }

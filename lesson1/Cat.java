@@ -28,7 +28,7 @@ public class Cat implements Runnable,Jumpable{
         if ((max-dis)>=0) {
             System.out.println("Cat run all distance. Dist.: "+dis);
         }else{
-            System.out.println("Cat can't run all distance. Dist.: "+dis);
+            System.out.println("Cat can't run all distance. Dist.: " + dis);
         }
     }
 
