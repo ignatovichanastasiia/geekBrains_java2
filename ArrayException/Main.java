@@ -19,7 +19,7 @@ public class Main {
             System.out.println(e.getMessage()+e.getSIZE());
         }
         printArray(arrInt);
-        sum = arrSum(arrInt);
+        sum = sumApp(arrInt);
         System.out.println("Сумма чисел массива: " + sum);
         System.out.println("end");
     }
@@ -51,7 +51,7 @@ public class Main {
         return arrInt;
     }
 
-    public static int arrSum(int[][] arr) {
+    public static int sumApp(int[][] arr) {
         for (x = 0; x < arr.length; x++) {
             for (y = 0; y < arr.length; y++) {
                 sum = sum + arrInt[x][y];
