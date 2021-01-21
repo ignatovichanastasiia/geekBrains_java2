@@ -13,8 +13,8 @@ public class Main {
                     {"3", "7", "4", "7"}};
         try {
             arrInt = ArrayException(arrString);
-        } catch (NumberFormatException e) {
-            throw new MyCastException("Преобразование не выполнено. Измените формат ячейки: ", x, y);
+        } catch (MyCastException e) {
+            System.out.println(e.getMessage()+e.getX() + ", " + e.getY());
         } catch (MyArrayException e) {
             System.out.println(e.getMessage()+e.getSIZE());
         }
@@ -45,8 +45,8 @@ public class Main {
                     arrInt[x][y] = Integer.parseInt(arr[x][y]);
                 }
             }
-        } catch (MyCastException e) {
-            System.out.println(e.getMessage()+e.getX() + ", " + e.getY());
+        }catch (NumberFormatException e) {
+                throw new MyCastException("Преобразование не выполнено. Измените формат ячейки: ", x, y);
         }
         return arrInt;
     }
