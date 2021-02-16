@@ -1,11 +1,8 @@
 package lesson1;
 
-import java.util.Scanner;
-
 public class Main {
     public static int max;
     public static int dis;
-    public static DayOfWeek day;
 
     public static void main(String[] args) {
         Cat cat1 = new Cat(200, 150);
@@ -33,11 +30,7 @@ public class Main {
         Treadmill[] trms = {tr2, tr3, tr4, tr5};
         System.out.println("Get tracks.");
         RunningDis(runnables, trms);
-        Scanner sca = new Scanner(System.in);
-        DayOfWeek.allDays();
-        System.out.println("\nwrite day of week: ");
-        day = DayOfWeek.valueOf(sca.next());
-        DayOfWeek.getWorkingHours(day);
+
     }
 
     public static void Jumping(Jumpable[] jumpables) {
