@@ -2,7 +2,7 @@ package ArrayException;
 
 public class Main {
     public static int[][] arrInt = new int[4][4];
-    public static int sum;
+    public static int SUM;
     public static int x, y;
     private static final int SIZE = 4;
 
@@ -12,15 +12,15 @@ public class Main {
                     {"2", "7", "5", "4"},
                     {"3", "7", "4", "7"}};
         try {
-            arrInt = ArrayException(arrString);
-        } catch (MyTakeIntException e) {
+            TakeSumArrInt(arrString);
+        } catch (MyCastException e) {
             System.out.println(e.getMessage()+e.getX() + ", " + e.getY());
         } catch (MyArrayException e) {
             System.out.println(e.getMessage()+e.getSIZE());
         }
+
+        System.out.println("Сумма чисел массива: " + SUM);
         printArray(arrInt);
-        sum = sumApp(arrInt);
-        System.out.println("Сумма чисел массива: " + sum);
         System.out.println("end");
     }
 
@@ -33,7 +33,7 @@ public class Main {
         }
     }
 
-    public static int[][] ArrayException(String[][] arr) throws MyArrayException, MyTakeIntException {
+    public static int TakeSumArrInt(String[][] arr) throws MyArrayException, MyCastException {
         for(int i = 0;i<arr.length;i++){
             if (arr[i].length != SIZE) {
                 throw new MyArrayException("Массив превышает допустимый размер: ", SIZE);
@@ -43,20 +43,12 @@ public class Main {
             for (x = 0; x < arr.length; x++) {
                 for (y = 0; y < arr.length; y++) {
                     arrInt[x][y] = Integer.parseInt(arr[x][y]);
+                    SUM = SUM + arrInt[x][y];
                 }
             }
         }catch (NumberFormatException e) {
-                throw new MyTakeIntException("Преобразование не выполнено. Измените формат ячейки: ", x, y);
+                throw new MyCastException("Преобразование не выполнено. Измените формат ячейки: ", x, y);
         }
-        return arrInt;
-    }
-
-    public static int sumApp(int[][] arr) {
-        for (x = 0; x < arr.length; x++) {
-            for (y = 0; y < arr.length; y++) {
-                sum = sum + arrInt[x][y];
-            }
-        }
-        return sum;
+        return SUM;
     }
 }
