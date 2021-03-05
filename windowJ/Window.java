@@ -17,6 +17,7 @@ public class Window extends JFrame {
     private JTextArea jTextArea;
     private JTextField jTextField;
     private String clientMessage;
+    private String messageToServer;
 
 
     public static void main(String[] args) {
@@ -141,8 +142,9 @@ public class Window extends JFrame {
     private void sendMessageToServer() {
         if (!jTextField.getText().trim().isEmpty()) {
             try {
-                dos.writeUTF(jTextField.getText());
-                jTextArea.append("User: " + jTextField.getText() + "/n");
+                messageToServer = jTextField.getText();
+                dos.writeUTF(messageToServer);
+                jTextArea.append("User: " + messageToServer + "/n");
                 jTextArea.setText("");
             } catch (IOException e) {
                 e.printStackTrace();

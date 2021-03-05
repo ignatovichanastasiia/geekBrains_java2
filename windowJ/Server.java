@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    private static Socket socket = null;
+//    private static Socket socket = null;
 
     public static void main(String[] args) {
 
@@ -13,9 +13,9 @@ public class Server {
             //поток на сервер
             @Override
             public void run() {
-                try (ServerSocket serverSocket = new ServerSocket(8080)) {
+                try (ServerSocket serverSocket = new ServerSocket(8181)) {
                     System.out.println("Сервер запущен...");
-                    socket = serverSocket.accept();
+                    Socket socket = serverSocket.accept();
                     System.out.println("Клиент подключился");
                     //вход и выход
                     DataInputStream dis = new DataInputStream(socket.getInputStream());
