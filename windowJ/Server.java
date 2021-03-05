@@ -36,6 +36,6 @@ public class Server {
                     e.printStackTrace();
                 }
             }
-        });
+        }).start();
     }
 }
