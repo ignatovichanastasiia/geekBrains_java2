@@ -9,27 +9,51 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Window extends JFrame {
-    private final static String IP_ADDRESS = "127.0.0.1";
-    private final static int SERVER_PORT = 8080;
+    private final static String IP_ADDRESS = "localhost"; //127.0.0.1
+    private final static int SERVER_PORT = 8189;
     private Socket socket;
     private DataInputStream dis;
     private DataOutputStream dos;
-    private JTextArea jTextArea;
-    private JTextField jTextField;
-    private String clientMessage;
-    private String messageToServer;
+    public JTextArea jTextArea;
+    public JTextField jTextField;
+//    private String clientMessage;
+//    private String messageToServer;
 
 
     public static void main(String[] args) {
 
-        SwingUtilities.invokeLater (() -> {
+        SwingUtilities.invokeLater(() -> {
             new Window();
         });
     }
 
     private Window() {
-        prepareWindow();
         connection();
+        prepareWindow();
+
+    }
+
+    private void connection() {
+        try {
+            //сокет, вход, выход
+            socket = new Socket(IP_ADDRESS, SERVER_PORT);
+            dis = new DataInputStream(socket.getInputStream());
+            dos = new DataOutputStream(socket.getOutputStream());
+            new Thread(() -> {
+                while (true) {
+                    try {
+                        String serverMessage = dis.readUTF();
+                        if (serverMessage.equals("/q")) {
+                            closeConnection();
+                            break;
+                        }
+                        jTextArea.append("Server: " + serverMessage + "\n");
+                    } catch (IOException ignored) {
+                    }
+                }
+            }).start();
+        } catch (IOException ignored) {
+        }
     }
 
     private void prepareWindow() {
@@ -53,7 +77,7 @@ public class Window extends JFrame {
         });
 
         //текстовое поле
-        JTextArea jTextArea = new JTextArea("Текст арея\n");
+        jTextArea = new JTextArea("Текст арея\n");
         jTextArea.setBackground(Color.lightGray);
         jTextArea.setLineWrap(true);
         jTextArea.setLayout(null);
@@ -61,19 +85,36 @@ public class Window extends JFrame {
 
         //панель
         JPanel panel = new JPanel();
-        JTextField jTextField = new JTextField();
+        jTextField = new JTextField();
         panel.setLayout(new GridLayout(1, 2));
         jTextField.setSize(20, 20);
         jTextField.setBackground(Color.white);
         panel.add(jTextField, BorderLayout.PAGE_START);
-        TakeKeyListener(jTextArea, jTextField);
+        jTextField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    sendMessageToServer();
+                }
+            }
+        });
 
         //кнопка
-        JButton answertButton = new JButton("Написать");
-        panel.add(answertButton, BorderLayout.CENTER);
-        answertButton.addActionListener(new ActionListener() {
+        JButton answerButton = new JButton("Написать");
+        panel.add(answerButton, BorderLayout.CENTER);
+        answerButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 sendMessageToServer();
             }
         });
@@ -83,35 +124,6 @@ public class Window extends JFrame {
         jFrame.setVisible(true);
     }
 
-    private void connection() {
-        try {
-            //сокет, вход, выход
-            socket = new Socket(IP_ADDRESS, SERVER_PORT);
-            dis = new DataInputStream(socket.getInputStream());
-            dos = new DataOutputStream(socket.getOutputStream());
-            new Thread(new Runnable() {
-                //поток на наблюдателя, чтение сервера, вывод в чат
-                @Override
-                public void run() {
-                    try {
-                        while (true) {
-                            String serverMessage = null;
-                            serverMessage = dis.readUTF();
-                            if (serverMessage.equalsIgnoreCase("/q")) {
-                                closeConnection();
-                                break;
-                            }
-                            jTextArea.append("Server: " + serverMessage + "/n");
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     //закрывашка
     private void closeConnection() {
@@ -142,36 +154,14 @@ public class Window extends JFrame {
     private void sendMessageToServer() {
         if (!jTextField.getText().trim().isEmpty()) {
             try {
-                messageToServer = jTextField.getText();
+                String messageToServer = jTextField.getText();
                 dos.writeUTF(messageToServer);
-                jTextArea.append("User: " + messageToServer + "/n");
-                jTextArea.setText("");
-            } catch (IOException e) {
-                e.printStackTrace();
+                jTextArea.append("User: " + messageToServer + "\n");
+                jTextField.setText("");
+            } catch (IOException ignored) {
             }
         }
     }
 
-    //вынос кода - наблюдатель для enter
-    private void TakeKeyListener(JTextArea jTextArea, JTextField jTextField) {
-        jTextField.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    sendMessageToServer();
-                }
-            }
-        });
-    }
 }
 

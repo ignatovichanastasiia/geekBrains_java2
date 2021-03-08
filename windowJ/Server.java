@@ -5,37 +5,63 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-//    private static Socket socket = null;
-
     public static void main(String[] args) {
+        Socket socket = null;
 
-        new Thread(new Runnable() {
-            //поток на сервер
-            @Override
-            public void run() {
-                try (ServerSocket serverSocket = new ServerSocket(8181)) {
-                    System.out.println("Сервер запущен...");
-                    Socket socket = serverSocket.accept();
-                    System.out.println("Клиент подключился");
-                    //вход и выход
-                    DataInputStream dis = new DataInputStream(socket.getInputStream());
-                    DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-                    while (true) {
-                        String clientMessage = dis.readUTF();
-                        System.out.println(clientMessage);
-                        if (clientMessage.equalsIgnoreCase("/q")) {
-                            dos.writeUTF(clientMessage);
-                            break;
-                        }
-                        BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-                        //чтение с консоли
-                        dos.writeUTF("Server: " + buffer.readLine());
-                        //вывод ридера
+        try (ServerSocket serverSocket = new ServerSocket(8189)) {
+            System.out.println("Сервер запущен...");
+            socket = serverSocket.accept();
+            System.out.println("Клиент подключился");
+            //вход и выход
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+
+            while (true) {
+                try {
+                    String clientMessage = dis.readUTF();
+                    System.out.println(clientMessage);
+                    if (clientMessage.equals("/q")) {
+                        dos.writeUTF(clientMessage);
+                        closeConnection(dis, dos, socket);
+                        break;
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+
+                while (true) {
+                    String consMessage = buffer.readLine();
+                    if(consMessage.equals("/q")) break;
+                    dos.writeUTF(consMessage);
+                    consMessage = "";
+                }
+                } catch (IOException ignored) {
                 }
             }
-        }).start();
+        } catch (IOException ignored) {
+        }
+    }
+
+
+    //закрывашка
+    private static void closeConnection(DataInputStream dis, DataOutputStream dos, Socket socket) {
+        try {
+            dos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            dis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            dos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
