@@ -5,9 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
+    private static Socket socket;
     public static void main(String[] args) {
-        Socket socket = null;
-
         try (ServerSocket serverSocket = new ServerSocket(8189)) {
             System.out.println("Сервер запущен...");
             socket = serverSocket.accept();
@@ -15,6 +14,23 @@ public class Server {
             //вход и выход
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+
+            new Thread(() -> {
+                BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+                while (true) {
+                    try {
+                        String consMessage = buffer.readLine();
+                        if (consMessage.equals("/q")) {
+                            closeConnection(dis, dos, socket);
+                            break;
+                        }
+                        dos.writeUTF(consMessage);
+                        consMessage = "";
+
+                    } catch (IOException ignored) {
+                    }
+                }
+            }).start();
 
             while (true) {
                 try {
@@ -25,14 +41,6 @@ public class Server {
                         closeConnection(dis, dos, socket);
                         break;
                     }
-                    BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-
-                while (true) {
-                    String consMessage = buffer.readLine();
-                    if(consMessage.equals("/q")) break;
-                    dos.writeUTF(consMessage);
-                    consMessage = "";
-                }
                 } catch (IOException ignored) {
                 }
             }
