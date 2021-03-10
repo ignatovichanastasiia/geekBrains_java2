@@ -83,15 +83,7 @@ public class ClientHandler {
                 sendMessage(messageFromClient);
                 return;
             }
-            if((messageFromClient.equals("/w"))) {
-                String[] arr = messageFromClient.split("\\s");
-                String nameTo = arr[1];
-                if (myServer.isNickBusy(name)) {
-                    myServer.sendPrivateMessage(messageFromClient, nameTo);
-                } else {
-                    System.out.println("Here is no such user");
-                }
-            }
+
             myServer.sendMessageToClients(name +": " + messageFromClient);
         }
     }

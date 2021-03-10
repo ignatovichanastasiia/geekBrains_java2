@@ -174,12 +174,12 @@ public class Window3 extends JFrame {
 
 
     //отправка сообщений в чат и на сервер
-    private void sendMessageToServer() {
+    public void sendMessageToServer() {
         if (!jTextField.getText().trim().isEmpty()) {
             try {
                 String messageToServer = jTextField.getText();
                 dos.writeUTF(messageToServer);
-                jTextArea.append(messageToServer + "\n");
+//                jTextArea.append(messageToServer + "\n");
                 jTextField.setText("");
             } catch (IOException ignored) {
             }

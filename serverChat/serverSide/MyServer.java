@@ -33,8 +33,18 @@ public class MyServer {
     }
 
     public synchronized void sendMessageToClients(String message){
-        for(ClientHandler c: clientsList){
-            c.sendMessage(message);
+        String[] arr = message.trim().split("\\s");
+        if(arr[1].equals("/w")) {
+            String nameTo = arr[2];
+            if (isNickBusy(nameTo)) {
+                sendPrivateMessage(message, nameTo);
+            } else {
+                System.out.println("Here is no such user");
+            }
+        }else {
+            for (ClientHandler c : clientsList) {
+                c.sendMessage(message);
+            }
         }
     }
 
