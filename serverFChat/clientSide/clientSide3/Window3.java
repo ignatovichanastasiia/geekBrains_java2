@@ -143,33 +143,31 @@ public class Window3 extends JFrame {
         jFrame.setVisible(true);
     }
 
-
     //закрывашка
     private void closeConnection() {
         try {
-            dos.flush();
+            if(dos!=null) dos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            dis.close();
+            if(dis!=null) dis.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            dos.close();
+            if(dos!=null) dos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            socket.close();
+            if(socket!=null)socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    //отправка сообщений в чат и на сервер
+    //отправка сообщений в чат и на сервер - формат: только сообщение без ника
     public void sendMessageToServer() {
         if (!jTextField.getText().trim().isEmpty()) {
             try {
@@ -180,5 +178,4 @@ public class Window3 extends JFrame {
             }
         }
     }
-
 }

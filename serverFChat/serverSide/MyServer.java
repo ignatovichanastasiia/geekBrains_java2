@@ -68,7 +68,7 @@ public class MyServer {
                     }
                     break;
 
-                //онлайн пользователи
+                //онлайн пользователи - запрос
                 case ("/ou"):
                     List<String> usersOnline = new ArrayList();
                     for (ClientHandler c : clientsList) {
